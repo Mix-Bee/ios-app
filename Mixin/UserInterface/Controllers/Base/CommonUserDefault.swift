@@ -50,8 +50,8 @@ class CommonUserDefault {
         }
     }
     
-    func getConversationDraft(_ conversationId: String) -> String {
-        return conversationDraft[conversationId] as? String ?? ""
+    func getConversationDraft(_ conversationId: String) -> String? {
+        return conversationDraft[conversationId] as? String
     }
 
     func setConversationDraft(_ conversationId: String, draft: String) {
