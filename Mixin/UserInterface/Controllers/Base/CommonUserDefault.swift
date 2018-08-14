@@ -4,6 +4,8 @@ class CommonUserDefault {
 
     static let shared = CommonUserDefault()
 
+    private let keyFirstLaunchSince1970 = "first_launch_since_1970"
+    private let keyHasPerformedTransfer = "has_performed_transfer"
     private var keyConversationDraft: String {
         return "defalut_conversation_draft_\(AccountAPI.shared.accountIdentityNumber)"
     }
@@ -32,6 +34,15 @@ class CommonUserDefault {
         }
     }
 
+    var hasPerformedTransfer: Bool {
+        get {
+            return session.bool(forKey: keyHasPerformedTransfer)
+        }
+        set {
+            session.set(newValue, forKey: keyHasPerformedTransfer)
+        }
+    }
+    
     private var conversationDraft: [String: Any] {
         get {
             return session.dictionary(forKey: keyConversationDraft) ?? [:]
@@ -73,6 +84,17 @@ class CommonUserDefault {
         }
     }
 
+    var firstLaunchTimeIntervalSince1970: TimeInterval {
+        return session.double(forKey: keyFirstLaunchSince1970)
+    }
+    
+    func updateFirstLaunchDateIfNeeded() {
+        guard session.double(forKey: keyFirstLaunchSince1970) == 0 else {
+            return
+        }
+        session.set(Date().timeIntervalSince1970, forKey: keyFirstLaunchSince1970)
+    }
+    
     var lastUpdateOrInstallTime: String {
         return session.string(forKey: keyLastUpdateOrInstallDate) ?? Date().toUTCString()
     }
